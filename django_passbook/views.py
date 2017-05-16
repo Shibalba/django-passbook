@@ -58,7 +58,7 @@ def register_pass(request, device_library_id, pass_type_id, serial_number):
     pass_auth_token = pass_.authentication_token
     re_pattern = '^(Apple|Android)Pass {}'.format(pass_auth_token)
 
-    if not re.match(re_pattern, request_auth_header):
+    if not request_auth_header or not re.match(re_pattern, request_auth_header):
         return HttpResponse(status=401)
 
     registration = Registration.objects.filter(
@@ -101,7 +101,7 @@ def latest_version(request, pass_type_id, serial_number):
     pass_auth_token = pass_.authentication_token
     re_pattern = '^(Apple|Android)Pass {}'.format(pass_auth_token)
 
-    if not re.match(re_pattern, request_auth_header):
+    if not request_auth_header or not re.match(re_pattern, request_auth_header):
         return HttpResponse(status=401)
 
     response = HttpResponse(

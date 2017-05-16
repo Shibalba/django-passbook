@@ -1,5 +1,3 @@
-![Passbook](http://cl.ly/JPjc/title_passbook.png)
-
 ===============
 django-passbook
 ===============
@@ -11,13 +9,13 @@ This application implements the specified API for passbook webservices. It handl
 Requirements
 ============
 
-- Django 1.4
+- Django 1.6
 
 Getting Started
 ===============
 
 ```
-$ pip install django-passbook==0.1.0dev
+$ pip install django-passbook-an==0.2.0
 ```
 
 Add 'django_passbook' to you installed apps in the settings.py file.
@@ -32,9 +30,10 @@ PASSBOOK_CERT_KEY = '/home/faramendi/my-site/key-nopass.pem'
 You should also import the urls in your site urls.
 ```
 from django_passbook import urls
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^api/', include('django_passbook.urls')),
 ```
+]
 
 django-passbook signals certain events that might come handy in your application.
 ```
@@ -56,9 +55,4 @@ The complete specification can be found in the [Passbook Web Service Reference](
 Contact
 =======
 
-devartis
-
-- http://devartis.com
-- http://github.com/devartis
-- http://twitter.com/devartis
-- info@devartis.com
+- http://github.com/Shibalba

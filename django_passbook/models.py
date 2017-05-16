@@ -5,9 +5,9 @@ class Pass(models.Model):
     """
     Pass instance
     """
-    pass_type_identifier = models.CharField(max_length=50)
-    serial_number = models.CharField(max_length=50)
-    authentication_token = models.CharField(max_length=50)
+    pass_type_identifier = models.CharField(max_length=255)
+    serial_number = models.CharField(max_length=255)
+    authentication_token = models.CharField(max_length=255)
     data = models.FileField(upload_to='passes')
     updated_at = models.DateTimeField()
 
@@ -22,8 +22,8 @@ class Registration(models.Model):
     """
     Registration of a Pass on a device
     """
-    device_library_identifier = models.CharField(max_length=50)
-    push_token = models.CharField(max_length=50)
+    device_library_identifier = models.CharField(max_length=64)
+    push_token = models.CharField(max_length=64)
     pazz = models.ForeignKey(Pass)
 
     def __unicode__(self):

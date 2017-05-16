@@ -1,6 +1,6 @@
 from django.contrib import admin
-from django_passbook.models import Pass, Registration, Log
-from django_passbook import settings
+from .models import Pass, Registration, Log
+import settings
 from apns import APNs, Payload
 
 

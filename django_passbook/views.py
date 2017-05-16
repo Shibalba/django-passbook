@@ -1,11 +1,12 @@
 import json
+import re
+import django.dispatch
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import condition
-from django_passbook.models import Pass, Registration, Log
+from .models import Pass, Registration, Log
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
-import django.dispatch
 from datetime import datetime
 
 FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -17,6 +18,7 @@ def registrations(request, device_library_id, pass_type_id):
     """
     Gets the Serial Numbers for Passes Associated with a Device
     """
+
     passes = Pass.objects.filter(
         registration__device_library_identifier=device_library_id,
         pass_type_identifier=pass_type_id
@@ -35,12 +37,12 @@ def registrations(request, device_library_id, pass_type_id):
                 updated_at=last_updated
             ).all()
         ]
-        response_data = {'lastUpdated': last_updated.strftime(
-            FORMAT), 'serialNumbers': serial_numbers}
-        return HttpResponse(
-            json.dumps(response_data),
-            mimetype="application/json"
-        )
+        response_data = {
+            'lastUpdated': last_updated.strftime(FORMAT),
+            'serialNumbers': serial_numbers
+        }
+        json_type = "application/json"
+        return HttpResponse(json.dumps(response_data), content_type=json_type)
     else:
         return HttpResponse(status=204)
 
@@ -52,9 +54,11 @@ def register_pass(request, device_library_id, pass_type_id, serial_number):
     """
     pass_ = get_pass(pass_type_id, serial_number)
 
-    if request.META.get(
-        'HTTP_AUTHORIZATION'
-    ) != 'ApplePass %s' % pass_.authentication_token:
+    request_auth_header = request.META.get('HTTP_AUTHORIZATION')
+    pass_auth_token = pass_.authentication_token
+    re_pattern = '^(Apple|Android)Pass {}'.format(pass_auth_token)
+
+    if not re.match(re_pattern, request_auth_header):
         return HttpResponse(status=401)
 
     registration = Registration.objects.filter(
@@ -93,9 +97,11 @@ def latest_version(request, pass_type_id, serial_number):
     """
     pass_ = get_pass(pass_type_id, serial_number)
 
-    if request.META.get(
-        'HTTP_AUTHORIZATION'
-    ) != 'ApplePass %s' % pass_.authentication_token:
+    request_auth_header = request.META.get('HTTP_AUTHORIZATION')
+    pass_auth_token = pass_.authentication_token
+    re_pattern = '^(Apple|Android)Pass {}'.format(pass_auth_token)
+
+    if not re.match(re_pattern, request_auth_header):
         return HttpResponse(status=401)
 
     response = HttpResponse(

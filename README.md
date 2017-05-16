@@ -15,7 +15,7 @@ Getting Started
 ===============
 
 ```
-$ pip install django-passbook-an==0.2.0
+$ pip install django-passbook-an==0.2.2
 ```
 
 Add 'django_passbook' to you installed apps in the settings.py file.
@@ -32,8 +32,8 @@ You should also import the urls in your site urls.
 from django_passbook import urls
 urlpatterns = [
     url(r'^api/', include('django_passbook.urls')),
-```
 ]
+```
 
 django-passbook signals certain events that might come handy in your application.
 ```
